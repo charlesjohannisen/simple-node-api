@@ -1,0 +1,9 @@
+{
+  "apps": [{
+    "script": "index.js",
+    "watch": true,
+    "name": "generic-node-api",
+    "ignore_watch": ["node_modules", ".git", ".tmp", "assets/**/*", "views"],
+    "env": {}
+  }]
+}
