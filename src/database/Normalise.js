@@ -57,7 +57,7 @@ function normaliseEntry(model, entry, excl) {
 }
 
 function normaliseSelect(model, selectData, excl) {
-  if (typeof selectData !== 'string' && selectData.length) {
+  if (Array.isArray(selectData) && selectData.length) {
     return selectData.map(entry => normaliseEntry(model, entry, excl))
   }
   return normaliseEntry(model, selectData, excl)
