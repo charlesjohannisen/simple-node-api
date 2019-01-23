@@ -23,14 +23,12 @@ What things you need to install the software and how to install them
 ### Installing
 
 ```
-npm install -g pm2
 npm install
 copy env.example to .env and alter the variables as required.
-copy pm2.json.example to pm2.json
 ```
 
 ### Run
 
 ```
-pm2 start pm2.json
+npm start
 ```
