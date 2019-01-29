@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/charlesjohannisen/simple-node-api.git"
   },
-  "author": "Made Code",
+  "author": "Charles Johannisen",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/charlesjohannisen/simple-node-api/issues"
