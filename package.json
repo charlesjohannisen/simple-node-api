@@ -1,7 +1,7 @@
 {
-  "name": "generic-node-api",
+  "name": "simple-node-api",
   "version": "1.0.0",
-  "description": "Generic Node API",
+  "description": "Simple Node API",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/madeagency/generic-node-api.git"
+    "url": "git+https://github.com/charlesjohannisen/simple-node-api.git"
   },
   "author": "Made Code",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/madeagency/generic-node-api/issues"
+    "url": "https://github.com/charlesjohannisen/simple-node-api/issues"
   },
-  "homepage": "https://github.com/madeagency/generic-node-api#readme",
+  "homepage": "https://github.com/charlesjohannisen/simple-node-api#readme",
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
