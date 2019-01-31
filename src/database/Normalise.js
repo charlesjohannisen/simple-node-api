@@ -3,8 +3,9 @@ const { cropAndUpload, pluck, importModels } = require('../api/helper.js')
 const { join } = require('path')
 const models = importModels(join(__dirname, './models'))
 
-function selectFields(model) {
-  const fields = models[`${model}Fields`]
+async function selectFields(model) {
+  const globalModels = await models
+  const fields = globalModels[`${model}Fields`]
   const createFields = Object.keys(fields).filter(
     field => fields[field].insert && !fields[field].crop && !fields[field].file
   )
@@ -31,10 +32,11 @@ function selectFields(model) {
   }
 }
 
-function normaliseEntry(model, entry, excl) {
+async function normaliseEntry(model, entry, excl) {
   const exclude = excl || []
-  const { selectedFields } = selectFields(model)
-  const fields = models[`${model}Fields`]
+  const { selectedFields } = await selectFields(model)
+  const globalModels = await models
+  const fields = globalModels[`${model}Fields`]
   return selectedFields.reduce(
     (acc, field) => {
       if (field in entry) {
@@ -56,11 +58,12 @@ function normaliseEntry(model, entry, excl) {
   )
 }
 
-function normaliseSelect(model, selectData, excl) {
+async function normaliseSelect(model, selectData, excl) {
   if (Array.isArray(selectData) && selectData.length) {
-    return selectData.map(entry => normaliseEntry(model, entry, excl))
+    const dataMap = selectData.map(entry => normaliseEntry(model, entry, excl))
+    return await Promise.all(dataMap)
   }
-  return normaliseEntry(model, selectData, excl)
+  return await normaliseEntry(model, selectData, excl)
 }
 
 function deleteOldFile(field, db, id) {
@@ -80,8 +83,8 @@ function deleteOldFile(field, db, id) {
   })
 }
 
-function deleteOldFiles(model, req) {
-  const { deleteFileFields } = selectFields(model)
+async function deleteOldFiles(model, req) {
+  const { deleteFileFields } = await selectFields(model)
   return deleteFileFields.map(file => new Promise((resolve, reject) => {
     deleteOldFile(file, req.database, req.body.id || req.params.id)
       .then(resolve)
@@ -123,15 +126,15 @@ function getImageUploadArray(cropFields, model, req) {
   })
 }
 
-function normaliseData(model, req, action) {
+async function normaliseData(model, req, action) {
   const {
     createFields,
     updateFields,
     fileFields,
     cropFields
-  } = selectFields(model)
-  const imageUploadArray = getImageUploadArray(cropFields, model, req)
-  const fileUploadArray = getFileUploadArray(fileFields, model, req)
+  } = await selectFields(model)
+  const imageUploadArray = (cropFields && getImageUploadArray(cropFields, model, req)) || [Promise.resolve([])]
+  const fileUploadArray = (fileFields && getFileUploadArray(fileFields, model, req)) || [Promise.resolve([])]
 
   const fields = action === 'update' ? updateFields : createFields
 
